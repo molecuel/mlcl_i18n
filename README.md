@@ -1,4 +1,4 @@
 mlcl_i18n
 =========
 
-language detection library for node.js
+language handling module for molecuel CMS

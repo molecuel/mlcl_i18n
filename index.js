@@ -14,6 +14,11 @@ var i18n = function() {
     handleConfig.detectLngFromPath = 0;
   }
   var self = this;
+  handleConfig.useCookie = true;
+  handleConfig.forceDetectLngFromPath = true;
+  if(this.config.debug) {
+    handleConfig.debug = true;
+  }
   handleConfig.fallbackLng = this.defaultlang;
   handleConfig.supportedlang = this.supportedlang;
   i18next.init(handleConfig, function() {

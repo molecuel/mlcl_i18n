@@ -21,14 +21,12 @@ var i18n = function() {
   }
   handleConfig.fallbackLng = this.defaultlang;
   handleConfig.supportedlang = this.supportedlang;
-  i18next.init(handleConfig, function() {
-    self.i18next = i18next;
-  });
-  molecuel.on('mlcl::elements::registerSchema:pre', function(module, schemaname, schema) {
-    // check if we should avoid translation for that model
+  i18next.init(handleConfig);
+  this.i18next = i18next;
+  molecuel.on('mlcl::elements::registerSchema:post', function(module, schemaname, schemaRegistryEntry) {
     self.elements = module;
-    if(!self.elements.schemaDefinitionRegistry[schemaname].config.avoidTranslate) {
-      self._registerSchema(schemaname, schema);
+    if(schemaRegistryEntry.config && !schemaRegistryEntry.config.avoidTranslate) {
+      schemaRegistryEntry.schema.plugin(self._schemaPlugin, {modelname: schemaname});
     }
   });
 };
@@ -98,19 +96,27 @@ i18n.prototype.getDefaultLang = function getDefaultLang() {
  * @param model
  * @param indexable
  */
-i18n.prototype._registerSchema = function(schemaname) {
-  var i18nschema = {
-    lang: { type: String },
-    translations: [
-      {
-        language: {type: String, enum: this.supportedlang},
-        element: {type: this.elements.ObjectId, ref: schemaname}
-      }
-    ]
-  };
-  this.elements.addToSchemaDefinition(schemaname, i18nschema);
+i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
+  var i18n = getInstance();
+  if(options.modelname) {
+    schema.add({
+      lang: { type: String, enum: i18n.supportedlang, required: true},
+      translations: [
+        {
+          language: {type: String, enum: i18n.supportedlang},
+          url: {type: String, form: {hidden: true}},
+          element: {type: i18n.elements.ObjectId, ref: options.modelname, form:{select2:{fngAjax:true}}}
+        }
+      ]
+
+    });
+  }
 };
 
+/**
+ * Get the languages supported by the system
+ * @returns {Array}
+ */
 i18n.prototype.getSupportedLanguages = function getSupportedLanguages() {
   var target = this.config.languages;
   var supported = [];

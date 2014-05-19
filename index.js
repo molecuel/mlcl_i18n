@@ -68,6 +68,10 @@ i18n.prototype.initApplication = function(app) {
         req.url = str;
         res.setHeader('x-mlcl-i18n-prelangurl', req.prelangurl);
         res.setHeader('x-mlcl-i18n-nolangurl', req.url);
+      } else {
+        if (req.url.charAt(0) !== '/') {
+          req.url = req.url + '/'
+        }
       }
       res.setHeader('X-mlcl-i18n-language', req.language);
     }

@@ -59,8 +59,13 @@ function init(m) {
  * @param app
  */
 i18n.prototype.initApplication = function(app) {
+  var self = this;
   app.use(this.i18next.handle);
   app.use(function(req, res, next) {
+    // if language == dev which is not needed use the default language
+    if(req.language === 'dev') {
+      req.language = self.defaultlang;
+    }
     if(req.language) {
       req.prelangurl = req.url;
       var path = '/'+req.language;
@@ -72,7 +77,7 @@ i18n.prototype.initApplication = function(app) {
         res.setHeader('x-mlcl-i18n-nolangurl', req.url);
       } else {
         if (req.url.charAt(0) !== '/') {
-          req.url = req.url + '/'
+          req.url = req.url + '/';
         }
       }
       res.setHeader('X-mlcl-i18n-language', req.language);

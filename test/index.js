@@ -72,12 +72,12 @@ describe('i18n', function(){
       app.get('*', function(err, res) {
         res.send(200);
       });
-      app.listen(9000);
+      app.listen(9002);
     });
 
     it('testing middleware language url detection', function(done) {
       var request = require('request');
-      request('http://localhost:9000/ru/mytest', function (error, response, body) {
+      request('http://localhost:9002/ru/mytest', function (error, response, body) {
         if (!error && response.statusCode === 200) {
           assert(body === 'OK');
           assert(response.headers['x-mlcl-i18n-language'] === 'ru');
@@ -88,7 +88,7 @@ describe('i18n', function(){
 
     it('testing middleware language fallback detection', function(done) {
       var request = require('request');
-      request('http://localhost:9000/mytest', function (error, response, body) {
+      request('http://localhost:9002/mytest', function (error, response, body) {
         if (!error && response.statusCode === 200) {
           assert(body === 'OK');
           assert(response.headers['x-mlcl-i18n-language'] === 'en');
@@ -99,7 +99,7 @@ describe('i18n', function(){
 
     it('testing middleware url change rewrite', function(done) {
       var request = require('request');
-      request('http://localhost:9000/ru/mytest', function (error, response, body) {
+      request('http://localhost:9002/ru/mytest', function (error, response, body) {
         if (!error && response.statusCode === 200) {
           assert(body === 'OK');
           assert(response.headers['x-mlcl-i18n-nolangurl'] === '/mytest');

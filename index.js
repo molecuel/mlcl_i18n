@@ -6,6 +6,7 @@ var molecuel;
 var i18next = require('i18next');
 
 var i18n = function() {
+  molecuel.emit('mlcl::i18n::init:pre', this);
   this.config = molecuel.config.i18n;
   this.defaultlang = this.getDefaultLang();
   this.supportedlang = this.getSupportedLanguages();
@@ -29,6 +30,7 @@ var i18n = function() {
       schemaRegistryEntry.schema.plugin(self._schemaPlugin, {modelname: schemaname});
     }
   });
+  molecuel.emit('mlcl::i18n::init:post', this);
 };
 
 /* ************************************************************************

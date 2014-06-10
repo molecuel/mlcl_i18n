@@ -6,7 +6,6 @@ var molecuel;
 var i18next = require('i18next');
 
 var i18n = function() {
-  molecuel.emit('mlcl::i18n::init:pre', this);
   this.config = molecuel.config.i18n;
   this.defaultlang = this.getDefaultLang();
   this.supportedlang = this.getSupportedLanguages();
@@ -30,7 +29,6 @@ var i18n = function() {
       schemaRegistryEntry.schema.plugin(self._schemaPlugin, {modelname: schemaname});
     }
   });
-  molecuel.emit('mlcl::i18n::init:post', this);
 };
 
 /* ************************************************************************
@@ -59,13 +57,8 @@ function init(m) {
  * @param app
  */
 i18n.prototype.initApplication = function(app) {
-  var self = this;
   app.use(this.i18next.handle);
   app.use(function(req, res, next) {
-    // if language == dev which is not needed use the default language
-    if(req.language === 'dev') {
-      req.language = self.defaultlang;
-    }
     if(req.language) {
       req.prelangurl = req.url;
       var path = '/'+req.language;
@@ -77,7 +70,7 @@ i18n.prototype.initApplication = function(app) {
         res.setHeader('x-mlcl-i18n-nolangurl', req.url);
       } else {
         if (req.url.charAt(0) !== '/') {
-          req.url = req.url + '/';
+          req.url = req.url + '/'
         }
       }
       res.setHeader('X-mlcl-i18n-language', req.language);
@@ -114,9 +107,9 @@ i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
       lang: { type: String, enum: i18n.supportedlang, required: true},
       translations: [
         {
-          language: {type: String, enum: i18n.supportedlang},
+          language: {type: String, enum: i18n.supportedlang, hidden: true},
           url: {type: String, form: {hidden: true}},
-          element: {type: i18n.elements.ObjectId, ref: options.modelname, form:{select2:{fngAjax:true}}}
+          element: {type: i18n.elements.ObjectId, ref: options.modelname, hidden: true}
         }
       ]
 

@@ -19,7 +19,7 @@ var i18n = function() {
   if(this.config.debug) {
     handleConfig.debug = true;
   }
-  //handleConfig.fallbackLng = this.defaultlang;
+  handleConfig.fallbackLng = this.defaultlang;
   handleConfig.supportedlang = this.supportedlang;
   i18next.init(handleConfig);
   this.i18next = i18next;

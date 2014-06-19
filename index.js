@@ -23,10 +23,17 @@ var i18n = function() {
   handleConfig.supportedlang = this.supportedlang;
   i18next.init(handleConfig);
   this.i18next = i18next;
-  molecuel.on('mlcl::elements::registerSchema:post', function(module, schemaname, schemaRegistryEntry) {
-    self.elements = module;
-    if(schemaRegistryEntry.config && !schemaRegistryEntry.config.avoidTranslate) {
-      schemaRegistryEntry.schema.plugin(self._schemaPlugin, {modelname: schemaname});
+
+  /**
+   * Add plugin to the created models
+   */
+  molecuel.on('mlcl::elements::registerSchema:post', function(elements, schemaname, modelRegistryElement) {
+    self.elements = elements;
+    var options = modelRegistryElement.options;
+    var model =  modelRegistryElement.schema;
+    // check if the schema configuration avoids url creation.
+    if(options && !options.avoidTranslate) {
+      model.plugin(self._schemaPlugin, {modelname: schemaname});
     }
   });
 };
@@ -99,6 +106,11 @@ i18n.prototype.getDefaultLang = function getDefaultLang() {
  * @param modelname
  * @param model
  * @param indexable
+ */
+/**
+ * Return the definition of the plugin
+ * @param schema
+ * @param options
  */
 i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
   var i18n = getInstance();

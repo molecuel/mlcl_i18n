@@ -4,6 +4,7 @@
 var molecuel;
 
 var i18next = require('i18next');
+require('string.prototype.startswith');
 
 var i18n = function() {
   this.config = molecuel.config.i18n;
@@ -70,7 +71,7 @@ i18n.prototype.initApplication = function(app) {
       req.prelangurl = req.url;
       var path = '/'+req.language;
       var index = req.url.indexOf(path);
-      if(index !== -1) {
+      if(req.url.startsWith(path)) {
         var str = req.url.substr(path.length);
         req.url = str;
         res.setHeader('x-mlcl-i18n-prelangurl', req.prelangurl);
@@ -119,9 +120,10 @@ i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
       lang: { type: String, enum: i18n.supportedlang, required: true},
       translations: [
         {
-          language: {type: String, enum: i18n.supportedlang, hidden: true},
+          lang: {type: String, enum: i18n.supportedlang, form: {hidden: true}},
           url: {type: String, form: {hidden: true}},
-          element: {type: i18n.elements.ObjectId, ref: options.modelname, hidden: true}
+          element: {type: i18n.elements.ObjectId, ref: options.modelname, form: {hidden: true}},
+          title: {type: String, form: {hidden: true}}
         }
       ]
 

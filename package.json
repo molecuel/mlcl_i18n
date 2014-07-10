@@ -1,6 +1,6 @@
 {
   "name": "mlcl_i18n",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -21,7 +21,8 @@
     "mocha-jshint": ">=0.0.1",
     "express": ">=4.0.0",
     "body-parser": ">=0.0.1",
-    "request": ">=0.0.1"
+    "request": ">=0.0.1",
+    "string.prototype.startswith": ">=0.0.1"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec"

@@ -70,7 +70,7 @@ i18n.prototype.initApplication = function(app) {
     if(req.language) {
       req.prelangurl = req.url;
       var path = '/'+req.language;
-      var index = req.url.indexOf(path);
+      //var index = req.url.indexOf(path);
       if(req.url.startsWith(path)) {
         var str = req.url.substr(path.length);
         req.url = str;

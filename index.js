@@ -37,6 +37,14 @@ var i18n = function() {
       model.plugin(self._schemaPlugin, {modelname: schemaname});
     }
   });
+
+
+  /**
+   * Register view helper
+   */
+  molecuel.on('mlcl::view::register:helper', function(view) {
+    self.registerViewHelpers(view);
+  });
 };
 
 /* ************************************************************************
@@ -145,5 +153,19 @@ i18n.prototype.getSupportedLanguages = function getSupportedLanguages() {
   }
   return supported;
 };
+
+i18n.prototype.registerViewHelpers = function registerViewHelpers(view) {
+
+  view.registerHelper('i18n:t', function(str, options) {
+    return i18next.t(str);
+  });
+
+  view.registerRequestHelper('i18n:l', function(view, req, res) {
+    return function() {
+      return "the Language = " + req.language;
+    }
+  });
+};
+
 
 module.exports = init;

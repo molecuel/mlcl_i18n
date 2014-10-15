@@ -22,6 +22,7 @@ var i18n = function() {
   }
   handleConfig.fallbackLng = this.defaultlang;
   handleConfig.supportedLngs = this.supportedlang;
+  handleConfig.resGetPath = 'config/locales/__lng__/__ns__.json' 
   i18next.init(handleConfig);
   this.i18next = i18next;
 

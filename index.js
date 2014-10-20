@@ -126,7 +126,7 @@ i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
   var i18n = getInstance();
   if(options.modelname) {
     schema.add({
-      lang: { type: String, enum: i18n.supportedlang, required: true},
+      lang: { type: String, enum: i18n.supportedlang, required: true, list: true},
       translations: [
         {
           lang: {type: String, enum: i18n.supportedlang, form: {hidden: true}},

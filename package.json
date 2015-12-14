@@ -1,6 +1,6 @@
 {
   "name": "mlcl_i18n",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -12,7 +12,7 @@
     "cms"
   ],
   "dependencies": {
-    "i18next": ">=0.0.1",
+    "i18next": "^1.0.0",
     "string.prototype.startswith": ">=0.0.1"
   },
   "devDependencies": {

@@ -4,6 +4,8 @@
 var molecuel;
 
 var i18next = require('i18next');
+var fs = require('fs');
+var path = require('path');
 require('string.prototype.startswith');
 
 var i18n = function() {
@@ -22,7 +24,7 @@ var i18n = function() {
   }
   handleConfig.fallbackLng = this.defaultlang;
   handleConfig.supportedLngs = this.supportedlang;
-  handleConfig.resGetPath = 'config/locales/__lng__/__ns__.json' 
+  handleConfig.resGetPath = 'config/locales/__lng__/__ns__.json';
   i18next.init(handleConfig);
   this.i18next = i18next;
 
@@ -141,6 +143,33 @@ i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
 };
 
 /**
+ * Get the translations for the frontend as json or in the defined format
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+i18n.prototype.getTranslation = function getTranslation(req, res) {
+  if(req.params.language) {
+    fs.readFile(path.resolve(process.cwd()) + '/config/locales/'+req.params.language+'/translation.json', 'utf8', function(err, file) {
+      if(!err) {
+        var langobject = JSON.parse(file);
+        if(req.query.format === 'ng') {
+          var langwrap = {};
+          langwrap[req.params.language] = langobject;
+          res.send(langwrap);
+        } else {
+          res.send(langobject);
+        }
+      } else {
+        res.send({});
+      }
+    });
+  } else {
+    res.status(404).send();
+  }
+};
+
+/**
  * Get the languages supported by the system
  * @returns {Array}
  */
@@ -157,14 +186,14 @@ i18n.prototype.getSupportedLanguages = function getSupportedLanguages() {
 
 i18n.prototype.registerViewHelpers = function registerViewHelpers(view) {
 
-  view.registerHelper('i18n:t', function(str, options) {
+  view.registerHelper('i18n:t', function(str) {
     return i18next.t(str);
   });
 
-  view.registerRequestHelper('i18n:l', function(view, req, res) {
+  view.registerRequestHelper('i18n:l', function(view, req) {
     return function() {
-      return "the Language = " + req.language;
-    }
+      return 'the Language = ' + req.language;
+    };
   });
 };
 

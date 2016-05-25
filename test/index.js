@@ -6,7 +6,6 @@ var assert = require('assert'),
   i18nmod = require('../'),
   util = require('util'),
   EventEmitter = require('events').EventEmitter,
-  should = require('should'),
   express = require('express'),
   bodyParser = require('body-parser');
 

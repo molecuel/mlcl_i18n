@@ -4,6 +4,8 @@
 var molecuel;
 
 var i18next = require('i18next');
+var middleware = require('i18next-express-middleware');
+var moment = require('moment-timezone');
 var fs = require('fs');
 var path = require('path');
 require('string.prototype.startswith');
@@ -12,6 +14,7 @@ var i18n = function() {
   this.config = molecuel.config.i18n;
   this.defaultlang = this.getDefaultLang();
   this.supportedlang = this.getSupportedLanguages();
+  this.moment = moment;
   var handleConfig = {};
   if(this.config.detectLngFromPath === true) {
     handleConfig.detectLngFromPath = 0;
@@ -25,7 +28,10 @@ var i18n = function() {
   handleConfig.fallbackLng = this.defaultlang;
   handleConfig.supportedLngs = this.supportedlang;
   handleConfig.resGetPath = 'config/locales/__lng__/__ns__.json';
-  i18next.init(handleConfig);
+  handleConfig.detection = {
+    order: ['path', 'session', 'querystring', 'cookie', 'header']
+  };
+  i18next.use(middleware.LanguageDetector).init(handleConfig);
   this.i18next = i18next;
 
   /**
@@ -41,13 +47,14 @@ var i18n = function() {
     }
   });
 
-
   /**
    * Register view helper
    */
   molecuel.on('mlcl::view::register:helper', function(view) {
     self.registerViewHelpers(view);
   });
+
+  molecuel.emit('mlcl::i18n::init:post', this);
 };
 
 /* ************************************************************************
@@ -59,7 +66,7 @@ var instance = null;
  * Singleton getInstance definition
  * @return singleton class
  */
-var getInstance = function(){
+var getInstance = function() {
   if(instance === null){
     instance = new i18n();
   }
@@ -72,11 +79,34 @@ function init(m) {
 }
 
 /**
+ * Get instances for string and date localization
+ * @return {[localizationObject]} [Object containing date and string localization instances]
+ */
+i18n.prototype.getLocalizationInstanceForLanguage = function(lang) {
+  var localizationObject = function(lang, moment, i18next) {
+    this.lang = lang;
+    this.origmoment = moment;
+    this.i18next = i18next.cloneInstance({lng: lang});
+  };
+  localizationObject.prototype.setLang = function(lang) {
+    this.lang = lang;
+  };
+  localizationObject.prototype.getLang = function() {
+    return this.lang;
+  };
+  // set the locale in a new moment instance
+  localizationObject.prototype.moment = function(datestring) {
+    return this.origmoment(datestring).locale(this.lang);
+  };
+  return new localizationObject(lang, this.moment, this.i18next);
+};
+
+/**
  * init module
  * @param app
  */
 i18n.prototype.initApplication = function(app) {
-  app.use(this.i18next.handle);
+  app.use(middleware.handle(this.i18next));
   app.use(function(req, res, next) {
     if(req.language) {
       req.prelangurl = req.url;

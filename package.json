@@ -12,7 +12,9 @@
     "cms"
   ],
   "dependencies": {
-    "i18next": "^1.0.0",
+    "i18next": "^2.0.0",
+    "i18next-express-middleware": "^1.0.1",
+    "moment-timezone": "^0.5.4",
     "string.prototype.startswith": ">=0.0.1"
   },
   "devDependencies": {

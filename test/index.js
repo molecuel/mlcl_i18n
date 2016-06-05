@@ -61,6 +61,12 @@ describe('i18n', function(){
       assert(lang === 'en');
       done();
     });
+
+    it('shoud return i18n instances', function() {
+      var langObj= i18n.getLocalizationInstanceForLanguage('de');
+      assert('object' === typeof langObj.i18next);
+      assert('function' === typeof langObj.moment);
+    });
   });
 
   describe('middleware', function() {

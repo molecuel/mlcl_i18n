@@ -9,6 +9,8 @@ var assert = require('assert'),
   express = require('express'),
   bodyParser = require('body-parser');
 
+  var path = require('path');
+
 describe('i18n', function(){
   var mlcl;
   var molecuel;
@@ -34,6 +36,9 @@ describe('i18n', function(){
           name: 'Russian',
           prefix: 'ru'
         }
+      },
+      backend: {
+        loadPath: path.resolve(process.cwd()) + '/config/locales/{{lng}}/{{ns}}.json'
       }
     };
 

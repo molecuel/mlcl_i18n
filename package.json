@@ -1,6 +1,6 @@
 {
   "name": "mlcl_i18n",
-  "version": "0.2.19",
+  "version": "0.3.0",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -14,6 +14,7 @@
   "dependencies": {
     "i18next": "^2.0.0",
     "i18next-express-middleware": "^1.0.1",
+    "i18next-node-fs-backend": "^0.1.2",
     "moment-timezone": "^0.5.4",
     "string.prototype.startswith": ">=0.0.1"
   },

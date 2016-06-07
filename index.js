@@ -5,6 +5,7 @@ var molecuel;
 
 var i18next = require('i18next');
 var middleware = require('i18next-express-middleware');
+var Backend = require('i18next-node-fs-backend');
 var moment = require('moment-timezone');
 var fs = require('fs');
 var path = require('path');
@@ -26,12 +27,23 @@ var i18n = function() {
     handleConfig.debug = true;
   }
   handleConfig.fallbackLng = this.defaultlang;
-  handleConfig.supportedLngs = this.supportedlang;
-  handleConfig.resGetPath = 'config/locales/__lng__/__ns__.json';
+  handleConfig.whitelist = this.supportedlang;
+  handleConfig.backend = {};
+  // path where resources get loaded from
+  handleConfig.backend.loadPath = path.resolve(process.cwd()) + '/config/locales/{{lng}}/{{ns}}.json';
+  // option to defined loadPath via config
+  if(molecuel.config.i18n && molecuel.config.i18n.backend && molecuel.config.i18n.backend.loadPath) {
+    handleConfig.backend.loadPath = molecuel.config.i18n.backend.loadPath;
+  }
   handleConfig.detection = {
-    order: ['path', 'session', 'querystring', 'cookie', 'header']
+    order: ['path', 'querystring', 'cookie', 'header']
   };
-  i18next.use(middleware.LanguageDetector).init(handleConfig);
+
+  i18next
+  .use(middleware.LanguageDetector)
+  .use(Backend)
+  .init(handleConfig);
+
   this.i18next = i18next;
 
   /**

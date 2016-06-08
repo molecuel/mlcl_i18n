@@ -193,7 +193,7 @@ i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
 i18n.prototype.getTranslation = function getTranslation(req, res) {
   if(req.params.language) {
     var namespace = 'translation';
-    if(req,params.namespace) {
+    if(req.params.namespace) {
       namespace = req.params.namespace;
     }
     fs.readFile(path.resolve(process.cwd()) + '/config/locales/'+req.params.language+'/'+namespace+'.json', 'utf8', function(err, file) {

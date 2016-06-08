@@ -192,7 +192,7 @@ i18n.prototype._schemaPlugin = function _schemaPlugin(schema, options) {
  */
 i18n.prototype.getTranslation = function getTranslation(req, res) {
   if(req.params.language) {
-    let namespace = 'translation';
+    var namespace = 'translation';
     if(req,params.namespace) {
       namespace = req.params.namespace;
     }

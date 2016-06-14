@@ -12,12 +12,12 @@
     "cms"
   ],
   "dependencies": {
-    "i18next": ">=0.0.1",
+    "i18next": "^1.0.0",
     "string.prototype.startswith": ">=0.0.1"
   },
   "devDependencies": {
     "mocha": "*",
-    "should": ">= 0.0.1",
+    "should": ">=0.0.1",
     "assert": ">=0.0.1",
     "mocha-jshint": ">=0.0.1",
     "express": ">=4.0.0",

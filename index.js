@@ -46,6 +46,9 @@ var i18n = function() {
 
   this.i18next = i18next;
 
+  // load all languages
+  this.i18next.loadLanguages(Object.keys(this.config.languages));
+
   /**
    * Add plugin to the created models
    */

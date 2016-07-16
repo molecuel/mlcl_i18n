@@ -48,7 +48,7 @@ var i18n = function() {
         }
       }
     }
-  }
+  };
 
   i18next
   .use(middleware.LanguageDetector)
@@ -110,7 +110,6 @@ function init(m) {
  */
 i18n.prototype.getLocalizationInstanceForLanguage = function(lang) {
   var localizationObject = function(lang, moment, i18next) {
-    var self = this;
     this.lang = lang;
     this.origmoment = moment;
     this.i18next = i18next.cloneInstance({lng: lang});

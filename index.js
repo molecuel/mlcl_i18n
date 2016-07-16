@@ -38,6 +38,17 @@ var i18n = function() {
   handleConfig.detection = {
     order: ['path', 'querystring', 'cookie', 'header']
   };
+  handleConfig.interpolation = {
+    format: function(val, format, lang) {
+      if(typeof val === 'string') {
+        var isValidDate = moment(val).isValid();
+        if(isValidDate) {
+          var localdate = moment(val).locale(lang).format(format);
+          return localdate;
+        }
+      }
+    }
+  }
 
   i18next
   .use(middleware.LanguageDetector)
@@ -99,9 +110,11 @@ function init(m) {
  */
 i18n.prototype.getLocalizationInstanceForLanguage = function(lang) {
   var localizationObject = function(lang, moment, i18next) {
+    var self = this;
     this.lang = lang;
     this.origmoment = moment;
     this.i18next = i18next.cloneInstance({lng: lang});
+    this.i18next.changeLanguage(lang);
   };
   localizationObject.prototype.setLang = function(lang) {
     this.lang = lang;
